@@ -48,6 +48,7 @@ const config: HardhatUserConfig = {
         url: process.env.MAINNET_RPC_URL!,
         blockNumber: 14561796
       },
+      allowUnlimitedContractSize: true
     },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",

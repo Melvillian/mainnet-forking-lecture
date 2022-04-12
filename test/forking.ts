@@ -1,6 +1,6 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
-import hre, { ethers, } from "hardhat";
+import hre, { ethers } from "hardhat";
 
 // The following code is an example of how we can use Hardhat's mainnet forking
 // feature to pretend to be the owner of the USDC contract, and mint 1 million USDC
@@ -21,7 +21,7 @@ describe("USDC mainnet forking", function () {
     const usdcContractAddress = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
     const ownerOfMasterMinter = '0xc1d9fe41d19dd52cb3ae5d1d3b0030b5d498c704'
 
-    const ONE_MILLION_USD = 1_000_000 * 10 ** 6;
+    const ONE_MILLION_USD = 1_000_000 * 10 ** 6; // USDC has 6 decimals
 
     // Impersonate as the owner of the master USDC minter contract
     // so we can mint some USDC for Alice
@@ -31,7 +31,7 @@ describe("USDC mainnet forking", function () {
     });
 
     // setup all the contract state we'll need
-    const impersonatedSigner = await ethers.getSigner(ownerOfMasterMinter);
+    const impersonatedSigner: SignerWithAddress = await ethers.getSigner(ownerOfMasterMinter);
     const [alice] = await ethers.getSigners();
 
     const usdcContractFactory = await ethers.getContractFactory("FiatTokenV2_1");
@@ -60,8 +60,8 @@ describe("USDC mainnet forking", function () {
     // finally, mint the 1 million USDC to Alice
     await usdc.connect(impersonatedSigner).mint(alice.address, ONE_MILLION_USD);
 
-    // should print "balance of alice: 1000000000000"
-    console.log(`balance of alice: ${await usdc.balanceOf(alice.address)}`)
+    // Alice should have received 1_000_000 USDC (which has 6 decimals)
+    await expect(await usdc.balanceOf(alice.address)).to.equal(1e6 * 1e6)
 
   })
 });
