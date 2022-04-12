@@ -2,6 +2,18 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import hre, { ethers, } from "hardhat";
 
+// The following code is an example of how we can use Hardhat's mainnet forking
+// feature to pretend to be the owner of the USDC contract, and mint 1 million USDC
+// to an arbitrary address (Alice's).
+//
+// I see 2 big ways this is useful:
+//
+// 1) You are a protocol dev who is about to make a complicated and possibly destructive
+// change to your mainnet contracts (for instance, upgrading a contract) and you want to
+// simulate exactly how it will work when you execute your upgrade on mainnet
+//
+// 2) You are a [white/black]hat hacker, and you want to simulate your attack on the
+// victims contract
 describe("USDC mainnet forking", function () {
   it("mint USDC for free!", async () => {
     // all of the addresses we'll need
